@@ -1,5 +1,6 @@
 from django.urls import path
+from .views import EmailVerificationAPIView
 
 
-urlpatterns = [
+urlpatterns = [path('email/', EmailVerificationAPIView.as_view(), name='email'),
 ]

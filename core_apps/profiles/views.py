@@ -1,3 +1,9 @@
 from django.shortcuts import render
+from rest_framework.generics import RetrieveAPIView
+from .models import Profile
+from .serializers import ProfileSerializer
 
-# Create your views here.
+
+class ProfileRetrieveAPIView(RetrieveAPIView):
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()
