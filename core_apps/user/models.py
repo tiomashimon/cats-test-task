@@ -12,9 +12,10 @@ class User(AbstractUser):
 
 
 class Verification(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.EmailField()
     code = models.IntegerField()
-
+    is_alive = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.email
