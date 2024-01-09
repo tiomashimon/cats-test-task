@@ -1,8 +1,8 @@
-"""
-Module-level docstring describing the purpose of the module.
-"""
+"""Module-level docstring describing the purpose of the module."""
+
 
 import os
+
 from celery import Celery
 from celery.schedules import crontab
 

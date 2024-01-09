@@ -1,0 +1,118 @@
+{% extends "client/base.html" %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center mb-4">User Profile</h2>
+            <div id="profileInfo"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+   
+
+    // Fetch user profile information
+    function fetchProfile() {
+        // Get the profile ID from the URL
+        var profileId = window.location.pathname.split('/')[2];
+        var csrftoken = document.getElementById("csrfmiddlewaretoken").value;
+
+        // Make a request to the profile endpoint
+        fetch('/api/profiles/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Token ' + localStorage.getItem('jwtToken'),
+                'X-CSRFToken': csrftoken,
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Display profile information
+            displayProfile(data);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            // Handle errors or display a message to the user
+        });
+    }
+
+    // Display profile information
+    function displayProfile(profileData) {
+        var profileInfoDiv = document.getElementById('profileInfo');
+        let button_text = 'button';  // Default value
+
+        console.log(profileData.user.email_verificated, 123);
+
+        if (profileData.user.email_verificated) {
+            button_text = "hidden";  // Update the outer variable
+        }
+
+        // Create HTML content directly from data
+        var profileHtml = `
+            <p><strong>Username:</strong> ${profileData.user.username}</p>
+            <p><strong>Email:</strong> ${profileData.user.email}</p>
+            <p><strong>Likes:</strong> ${profileData.user.likes}</p>
+            <p><strong>Dislikes:</strong> ${profileData.user.dislikes}</p>
+            <p><strong>Bio:</strong> ${profileData.bio}</p>
+            <p><strong>Verified:</strong> ${profileData.user.email_verificated ? 'Yes' : 'No'}</p>
+            <a href='${window.location.origin}/verification/'><input type="${button_text}" class="btn btn-success" value="Verify"></a>
+
+            <form>
+                <div style="display:none">
+                    <input type="hidden" id="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                </div>
+                <div class="form-group">
+                    <label for="memo">Memo:</label>
+                    <textarea class="form-control" id="memo" rows="3">${profileData.memo || ''}</textarea>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="updateProfile(${profileData.id})">Update Profile</button>
+            </form>
+        `;
+
+        // Set the HTML content
+        profileInfoDiv.innerHTML = profileHtml;
+    }
+
+    // Function to update profile
+    function updateProfile(profileId) {
+        // Get values from the form
+        var memo = document.getElementById('memo').value;
+        var csrftoken = document.getElementById("csrfmiddlewaretoken").value;
+
+        // Make a request to update the profile
+        fetch('/api/profiles/' , {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem('jwtToken'),
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({
+                bio: memo,
+            }),
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Profile update failed.');
+            }
+        })
+        .catch(error => {
+            console.error('Error during profile update:', error);
+        });
+    }
+
+    // Initial update of the navbar and fetch user profile
+    fetchProfile();
+</script>
+
+{% endblock body %}

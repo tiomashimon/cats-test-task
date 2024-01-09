@@ -4,28 +4,35 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('user', '0001_initial'),
+        ("user", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Verification',
+            name="Verification",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.EmailField(max_length=254)),
-                ('code', models.IntegerField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("email", models.EmailField(max_length=254)),
+                ("code", models.IntegerField()),
             ],
         ),
         migrations.AddField(
-            model_name='user',
-            name='dislikes',
+            model_name="user",
+            name="dislikes",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='user',
-            name='likes',
+            model_name="user",
+            name="likes",
             field=models.IntegerField(default=0),
         ),
     ]

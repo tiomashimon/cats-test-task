@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">Logo</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/profile">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/about">About</a>
+            </li>
+        </ul>
+        
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item" id="loginNavItem">
+                <a class="nav-link" href="/signin">Login</a>
+            </li>
+            <li class="nav-item" id="logoutNavItem">
+                <a class="nav-link" href="#" onclick="logout()">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+    <input type='hidden' id="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+
+{% block body %}
+
+{% endblock body %}
+
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; 
+    }
+
+    footer {
+        margin-top: auto; 
+        background-color: #f8f9fa; 
+        text-align: center;
+        padding: 10px;
+    }
+</style>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 .With love from Cat!</p>
+</footer>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<script>
+    var isLoggedIn = localStorage.getItem('jwtToken') !== null;
+
+    function updateNavbar() {
+        var loginNavItem = document.getElementById('loginNavItem');
+        var logoutNavItem = document.getElementById('logoutNavItem');
+
+        if (isLoggedIn) {
+            loginNavItem.style.display = 'none';
+            logoutNavItem.style.display = 'block';
+        } else {
+            loginNavItem.style.display = 'block';
+            logoutNavItem.style.display = 'none';
+        }
+    }
+
+    function logout() {
+        const jwtToken = localStorage.getItem('jwtToken');
+    
+        if (!jwtToken) {
+            console.log("User is not authenticated");
+            return;
+        }
+        var csrftoken = document.getElementById("csrfmiddlewaretoken").value;
+        fetch('/api/auth/token/logout/', {
+            method: 'POST',
+            headers: {
+                
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${jwtToken}`,
+                'X-CSRFToken': csrftoken,
+            },
+        })
+        .then(response => {
+            if (response.ok) {
+                localStorage.removeItem('jwtToken');
+                
+                isLoggedIn = false;
+                updateNavbar();
+                console.log("Logout successful");
+            } else {
+                console.error("Logout failed");
+            }
+        })
+        .catch(error => {
+            console.error("Error during logout:", error);
+        });
+    }
+    
+
+    updateNavbar();
+</script>
+
+
+</body>
+</html>

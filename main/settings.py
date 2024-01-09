@@ -10,10 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from pathlib import Path
 import os
-import environ
+from pathlib import Path
 
+import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,56 +21,49 @@ env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env('SECRET_KEY')
 
 
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
-
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
-APP_DIR = ROOT_DIR / "core_apps"
+APP_DIR = ROOT_DIR / 'core_apps'
 
 THIRD_PARTY_APPS = [
-    'corsheaders',   
+    'corsheaders',
     'rest_framework',
-    'drf_yasg', 
+    'drf_yasg',
     'rest_framework.authtoken',
-    'djoser',]
+    'djoser',
+]
 
 DJANGO_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
 ]
 
 LOCAL_APPS = [
     'core_apps.user',
     'core_apps.cat',
     'core_apps.profiles',
+    'core_apps.client',
 ]
 
-
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-
 
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
     'SECURITY_DEFINITIONS': {
-        'Token': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header'
-        }
+        'Token': {'type': 'apiKey', 'name': 'Authorization', 'in': 'header'},
     },
 }
-
 
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
@@ -79,7 +72,6 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -111,22 +103,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'main.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env("DB_NAME"),
-        'USER': env("DB_USER"),
-        'PASSWORD': env("DB_PASSWORD"),
-        'HOST': env("DB_HOST"),
-        'PORT': env("DB_PORT"),
-    }
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
+    },
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -150,12 +139,12 @@ AUTH_USER_MODEL = 'user.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = "Delight sourcesyncco@gmail.com"
+DEFAULT_FROM_EMAIL = 'Delight sourcesyncco@gmail.com'
 
 LANGUAGE_CODE = 'en-us'
 
@@ -164,7 +153,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -176,16 +164,16 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
 }
 
 DJOSER = {
+    'HIDE_USERS': False,
     'SERIALIZERS': {
         'user': 'core_apps.user.serializers.UserSerializer',
         },

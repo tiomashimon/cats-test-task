@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+
 from .models import User, Verification
+
 
 class CustomUserAdmin(BaseUserAdmin):
     list_display = ('username',)
@@ -11,17 +13,32 @@ class CustomUserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'username', 'password')}),
         ('Personal Info', {'fields': ('first_name', 'last_name')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        (
+            'Permissions',
+            {
+                'fields': (
+                    'is_active',
+                    'is_staff',
+                    'is_superuser',
+                    'groups',
+                    'user_permissions',
+                )
+            },
+        ),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
         ('Email Verification', {'fields': ('email_verificated',)}),
     )
 
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'username', 'password1', 'password2'),
-        }),
+        (
+            None,
+            {
+                'classes': ('wide',),
+                'fields': ('email', 'username', 'password1', 'password2'),
+            },
+        ),
     )
+
 
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Verification)

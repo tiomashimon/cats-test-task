@@ -12,3 +12,4 @@ flower==2.0.1
 requests==2.31.0
 djoser==2.2.2
 Pillow==9.4.0
+

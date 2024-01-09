@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('user', '0004_verification_created_at_verification_is_alive'),
+        ("user", "0004_verification_created_at_verification_is_alive"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='verification',
-            name='is_alive',
+            model_name="verification",
+            name="is_alive",
             field=models.BooleanField(default=True, null=True),
         ),
     ]

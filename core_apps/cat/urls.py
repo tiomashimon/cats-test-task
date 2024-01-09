@@ -1,12 +1,12 @@
 from django.urls import path
-from .views import CatViewSet
 from rest_framework.routers import DefaultRouter
 
+from .views import CatViewSet, CatVoteViewSet
 
 router = DefaultRouter()
-router.register('', CatViewSet, basename='cat')
+router.register("vote", CatVoteViewSet, basename="cat_vote")
+router.register("", CatViewSet, basename="cat")
 
-urlpatterns = [
-] 
+urlpatterns = []
 
 urlpatterns += router.urls
